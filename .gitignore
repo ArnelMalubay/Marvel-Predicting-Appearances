@@ -3,4 +3,4 @@ marvel-env
 # ignores other unnecessary files
 **/__pycache__
 **/__init__
-.scrapy.fcg
+**/scrapy.fcg
