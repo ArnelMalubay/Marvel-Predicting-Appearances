@@ -1,0 +1,5 @@
+# ignores the virtual environment folder marvel-env
+marvel-env
+# ignores other unnecessary files
+**/_pycache_
+scrapy.fcg
