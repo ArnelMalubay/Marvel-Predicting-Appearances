@@ -1,6 +1,7 @@
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
+import numpy as np
 
 # We use CrawlSpider instead of Spider so that we can make use of Rules and Link Extractors.
 class CharacterSpider(CrawlSpider):
@@ -42,9 +43,20 @@ class CharacterSpider(CrawlSpider):
         identity = response.css("[data-source=Identity]").css("a::text").get()
         citizenship = response.css("[data-source=Citizenship]").css("a::text").get()
         try:
-            first_appearance = response.css("[data-source=First]").css("a::text").getall()[-1]
+            candidates = response.css("[data-source=First]").css("a::text").getall()
+            def extract_year(entry):
+                try:
+                    year = int(entry.split()[-1])
+                    if year >= 1900:
+                        return year 
+                    else:
+                        return np.nan
+                except:
+                        return np.nan
+            candidate_years = [extract_year(candidate) for candidate in candidates]
+            year_introduced = np.nanmin(candidate_years)
         except:
-            first_appearance = None
+            year_introduced = None
         try:
             num_appearances = int(response.css("[href*=Appearances]::text").get().split()[0])
         except:
@@ -63,7 +75,7 @@ class CharacterSpider(CrawlSpider):
             "Birthplace" : birth_place,
             "Identity" : identity,
             "Citizenship" : citizenship,
-            "First_Appearance" : first_appearance,
+            "Year_Introduced" : year_introduced,
             "Appearances" : num_appearances
         }
 
