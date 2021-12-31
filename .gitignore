@@ -4,4 +4,4 @@ marvel-env
 **/__pycache__
 **/__init__
 **/scrapy.cfg
-**/catboost-info
+**/catboost_info
